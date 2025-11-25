@@ -1,92 +1,148 @@
-# 🪴 LifeMonitor
+# LifeMonitor
 
 <div align="center">
-[cite_start]Your Personal Operating System for Growth, Habits, and Vision. [cite: 3]
+
+**Your Personal Operating System for Growth, Habits, and Vision.**
+
 </div>
 
-[cite_start]LifeMonitor [cite: 1] [cite_start]is a hybrid cross-platform application designed to help users track their daily habits, journal their thoughts, manage tasks, and visualize their long-term goals[cite: 6].
+[![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/Framework-Django%205.1-092E20?style=flat&logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20Desktop-333333?style=flat)](https://beeware.org/)
+[![License](https://img.shields.io/badge/License-SEE%20FILE-yellow?style=flat)](LICENSE)
 
-[cite_start]Unlike standard web apps, LifeMonitor is built to run as a **standalone native application** on Android and Desktop systems[cite: 7]. [cite_start]It packages a full Django backend inside a native Toga shell, offering the power of a web framework with the privacy and portability of a local app[cite: 8].
+---
+
+## 📖 Overview
+
+LifeMonitor is a **hybrid cross-platform application** designed to help users **track their daily habits**, **journal their thoughts**, **manage tasks**, and **visualize their long-term goals**.
+
+Unlike standard web apps, LifeMonitor is engineered to run as a **standalone native application** on **Android** and **Desktop** systems. It cleverly packages a full **Django backend** inside a native **Toga shell** (part of the BeeWare project), offering the power and maturity of a web framework with the privacy and portability of a local app.
+
+A core feature is the **"Dynamic Database Switching"** system, which empowers users to fully own their data by storing it in local SQLite files that can be moved and synced across devices, ensuring **complete data privacy** and portability.
 
 ---
 
 ## ✨ Key Features
 
-1.  ### 🏠 Central Dashboard
-    * [cite_start]A beautiful, iOS-inspired **Bento Grid** interface provides instant access to all modules[cite: 12].
-    * [cite_start]**Quick Capture:** An iMessage-style input bar to instantly save thoughts or quotes without leaving the home screen[cite: 13].
-    * [cite_start]**Daily Manifesto:** A slide-up bottom sheet reminding you of your core principles[cite: 14].
-    * [cite_start]**Inspiration:** A masonry grid displaying your saved quotes and ideas[cite: 15].
+### 🏠 Central Dashboard
 
-2.  ### ✅ The Ritual (Habit Tracking)
-    * [cite_start]A dedicated "**Daily Log**" interface designed for end-of-day reflection[cite: 17].
-    * [cite_start]**Habit Stacks:** Toggle habits via interactive "pills"[cite: 18].
-    * [cite_start]**Journaling:** A clean writing space to capture daily summaries and lessons[cite: 19].
-    * [cite_start]**Social Connection:** Specifically track who you connected with or appreciated each day[cite: 20].
+* A beautiful, **iOS-inspired Bento Grid** interface provides instant access to all application modules.
+* **Quick Capture:** An iMessage-style input bar to instantly save thoughts or quotes without leaving the home screen.
+* **Daily Manifesto:** A slide-up bottom sheet reminding you of your core principles.
+* **Inspiration Feed:** A masonry grid displaying your saved quotes and ideas.
 
-3.  ### 📊 Analytics & Insights
-    * [cite_start]Visualize your progress with interactive charts powered by Chart.js[cite: 22].
-    * [cite_start]**Consistency Graphs:** See your habit streaks and completion rates[cite: 23].
-    * [cite_start]**Cumulative Score:** Track your "**Life Score**" growth over time based on positive vs. negative habit weights[cite: 24].
-    * [cite_start]**Social Graph:** See a horizontal bar chart of the people you interact with most frequently[cite: 25].
+### ✅ The Ritual (Habit Tracking)
 
-4.  ### 📅 Task Management
-    * [cite_start]**Interactive Calendar:** View tasks by month and day[cite: 27].
-    * [cite_start]**Consolidated List:** Manage tasks with a "Swipe to Complete" gesture (mobile)[cite: 28].
-    * [cite_start]**Task Types:** Distinguish between standard tasks and critical "**Day Tasks**"[cite: 29].
+* A dedicated **"Daily Log"** interface designed for end-of-day reflection.
+* **Habit Stacks:** Easily toggle habits via interactive "pills."
+* **Journaling:** A clean writing space to capture daily summaries and lessons.
+* **Social Connection:** Specifically track who you connected with or appreciated each day.
 
-5.  ### 🚀 Vision Board
-    * [cite_start]A timeline-based interface for strategic planning[cite: 31].
-    * [cite_start]**Master Plans:** Create overarching goals (e.g., "Launch Startup")[cite: 32].
-    * [cite_start]**Branching Steps:** Break goals down into actionable steps with detailed notes[cite: 33].
+### 📊 Analytics & Insights
 
-6.  ### 🔒 Privacy & Data Portability
-    * [cite_start]**Local First:** All data is stored locally on your device using SQLite[cite: 35].
-    * [cite_start]**Dynamic Database Switching:** The system allows users to own their data completely by saving it to local files that can be moved across devices[cite: 9].
-    * [cite_start]The settings menu allows you to **Create**, **Load**, or **Switch** database files dynamically[cite: 36].
-    * [cite_start]You can keep your data in a private internal folder or in the shared "Documents" folder for easy backup and syncing[cite: 37].
+* Visualize your progress with interactive charts powered by **Chart.js**.
+* **Consistency Graphs:** See your habit streaks and completion rates over time.
+* **Cumulative Score:** Track your **"Life Score"** growth based on positive vs. negative habit weights.
+* **Social Graph:** See a horizontal bar chart of the people you interact with most frequently.
+
+### 📅 Task Management
+
+* **Interactive Calendar:** View and plan tasks by month and day.
+* **Consolidated List:** Manage tasks efficiently with a **"Swipe to Complete"** gesture (optimized for mobile).
+* **Task Types:** Distinguish between standard tasks and critical **"Day Tasks."**
+
+### 🚀 Vision Board
+
+* A **timeline-based interface** for strategic planning and long-term goal visualization.
+* **Master Plans:** Create overarching goals (e.g., "Launch Startup").
+* **Branching Steps:** Break master plans down into actionable steps with detailed notes.
+
+### 🔒 Privacy & Data Portability
+
+* **Local First:** All data is stored locally on your device using **SQLite**.
+* **Dynamic Database Switching:** The settings menu allows you to **Create, Load, or Switch** database files dynamically, giving you complete control over backups and syncing.
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Component | Technology | Description |
+LifeMonitor is built on a modern, robust, and highly portable technology stack.
+
+| Component | Technology | Version / Description |
 | :--- | :--- | :--- |
-| **Frontend** | HTML5, Django Templates, Custom CSS, JavaScript (Chart.js) | [cite_start]Custom Glassmorphism/iOS Design System[cite: 46]. |
-| **Backend** | Python 3.13, Django 5.1 | [cite_start]Provides the core application logic[cite: 47]. |
-| **Native Wrapper** | BeeWare (Toga) | [cite_start]Renders the web app in a native system WebView[cite: 48]. |
-| **Packaging** | Briefcase | [cite_start]Compiles the Python environment into an APK (Android) or Executable (Linux/Windows)[cite: 49]. |
-| **Database** | SQLite3 | [cite_start]Used for local, dynamically pathing data storage[cite: 50]. |
+| **Backend** | **Python** | 3.13 |
+| **Web Framework** | **Django** | 5.1 |
+| **Native Wrapper** | **BeeWare (Toga)** | Renders the Django app in a native system WebView. |
+| **Packaging** | **Briefcase** | Compiles Python environment into native executables (APK, EXE). |
+| **Database** | **SQLite3** | Local-first, file-based storage. |
+| **Frontend** | **HTML5, Custom CSS/JS** | iOS-inspired design with **Chart.js** for visualizations. |
+
+---
+
+## 📂 Repository Structure
+
+This project follows a hybrid structure combining a standard Django web project with a BeeWare/Briefcase native wrapper to achieve cross-platform capability.
+```
+LifeMonitor/
+├── pyproject.toml           # Briefcase configuration (Dependencies, Permissions)
+├── src/
+│   ├── lifemonitor/         # Native App Wrapper (Toga)
+│   │   ├── app.py           # ENTRY POINT: Starts the Django server & WebView
+│   │   ├── __main__.py      # Python execution entry
+│   │   └── resources/       # App icons and native assets
+│   │   
+│   └── webapp/              # Django Project Source
+│       ├── manage.py        # Standard Django CLI tool
+│       ├── db_config.json   # Dynamic DB path configuration
+│       ├── user_monitoring/ # Project Settings Root
+│       │   ├── settings.py  # Adjusted for Android paths & WhiteNoise
+│       │   ├── urls.py      # Main URL routing
+│       │   └── wsgi.py      # WSGI entry for the threaded server
+│       │   
+│       └── monitor/         # Main Django App (Logic)
+│           ├── models.py    # Database Schema (Habits, Entries, Tasks)
+│           ├── views.py     # Business Logic & UI Rendering
+│           ├── forms.py     # Input Validation
+│           ├── urls.py      # App-specific routing
+│           ├── static/      # CSS, Images, JS (Chart.js)
+│           │   └── css/     # styles.css (The iOS Design System)
+│           └── templates/   # HTML Templates
+│               └── monitor/ # (home.html, input.html, chart.html, etc.)
+└── tests/                   # Test suite
+```
 
 ---
 
 ## 🚀 Getting Started (Development)
 
-To run this project locally on your machine for development:
+To run this project locally on your machine for development and testing:
 
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/anony43ctrl/LifeMonitor.git](https://github.com/anony43ctrl/LifeMonitor.git)
-    cd LifeMonitor
-    ```
+### 1. Clone the Repository
+```bash
+git clone https://github.com/anony43ctrl/LifeMonitor.git
+cd LifeMonitor
+```
 
-2.  **Create and Activate a Virtual Environment:**
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
-    ```
+### 2. Setup Environment
+```bash
+# Create a Virtual Environment
+python -m venv venv
 
-3.  **Install Dependencies:**
-    You need **Briefcase** to run the native wrapper mode.
-    ```bash
-    [cite_start]pip install briefcase [cite: 55]
-    ```
+# Activate the environment
+source venv/bin/activate    # On Linux/macOS
+# venv\Scripts\activate     # On Windows
 
-4.  **Run in Dev Mode:**
-    This launches the app on your desktop as a native window.
-    ```bash
-    [cite_start]briefcase dev [cite: 56]
-    ```
+# Install Briefcase and all dependencies
+pip install briefcase
+```
+
+### 3. Run in Dev Mode
+
+This command utilizes Briefcase to launch the application on your desktop as a native window, simulating the packaged environment.
+```bash
+briefcase dev
+```
 
 ---
 
@@ -94,22 +150,42 @@ To run this project locally on your machine for development:
 
 To compile the app into an APK file for your phone:
 
-1.  **Install Prerequisites:**
-    * [cite_start]Java JDK 17+ [cite: 60]
-    * [cite_start]Android SDK (Briefcase handles this automatically) [cite: 61]
+### Prerequisites
 
-2.  **Create the Android Project:**
-    ```bash
-    [cite_start]briefcase create android [cite: 62]
-    ```
+* **Java JDK 17+** must be installed and correctly configured in your environment path.
+* **Android SDK** (Briefcase will automatically manage the download and configuration of necessary components).
 
-3.  **Build the App:**
-    ```bash
-    [cite_start]briefcase build android [cite: 63]
-    ```
+### Build Commands
 
-4.  **Run on Device:**
-    Connect your phone via USB (Enable USB Debugging) and run:
-    ```bash
-    [cite_start]briefcase run android -d [cite: 64]
-    ```
+**1. Create the Android Project Structure:**
+```bash
+briefcase create android
+```
+
+**2. Build the App (Generates the APK):**
+```bash
+briefcase build android
+```
+
+**3. Run on Device (Requires USB Debugging Enabled):**
+```bash
+briefcase run android -d
+```
+
+---
+
+## 📄 License
+
+This project is licensed under a proprietary license. Please see the **[LICENSE](LICENSE)** file at the root of the repository for full details.
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! If you would like to contribute, please:
+
+1. Fork the repository.
+2. Create a new feature branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the branch (`git push origin feature/AmazingFeature`).
+5. Open a Pull Request.
