@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - User Monitoring</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .chart-wrapper {
+            position: relative; 
+            height: 400px; 
+            width: 100%;
+        }
+        
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .chart-badge {
+            background: rgba(0, 123, 255, 0.1);
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Common Navbar -->
+    <nav class="navbar" id="mainNav">
+        <div class="navbar-brand">LifeMonitor</div>
+        <div class="nav-links">
+            <a href="{% url 'home' %}" class="nav-item">Home</a>
+            <a href="{% url 'settings' %}" class="nav-item">Settings</a>
+            <a href="{% url 'logout' %}" class="nav-item btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <div style="max-width: 1000px; margin: 0 auto; padding: 20px;">
+        
+        <!-- Header & Actions -->
+        <div class="animate-fade-up" style="text-align: center; margin-bottom: 40px;">
+            <h1 style="font-weight: 800; margin-bottom: 10px;">Analytics Dashboard</h1>
+            <p style="color: var(--text-light); margin-bottom: 20px;">Visualize your consistency and progress over time.</p>
+            <a href="{% url 'input' %}" class="btn btn-primary">
+                + Add New Entry
+            </a>
+        </div>
+
+        <!-- Line Chart Section -->
+        <div class="glass-container animate-fade-up delay-1" style="margin-bottom: 30px;">
+            <div class="chart-header">
+                <h2 class="chart-title">Cumulative Progress</h2>
+                <span class="chart-badge">Growth</span>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Bar Chart Section -->
+        <div class="glass-container animate-fade-up delay-2">
+            <div class="chart-header">
+                <h2 class="chart-title">Consistency by Input</h2>
+                <span class="chart-badge">Frequency</span>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Smart Navbar Scroll Logic ---
+        let lastScroll = 0;
+        const navbar = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                navbar.classList.add('nav-hidden');
+            } else {
+                navbar.classList.remove('nav-hidden');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // --- Chart Configuration ---
+        
+        // Common options for consistent look
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: { font: { family: "'Segoe UI', sans-serif", size: 12 } }
+                }
+            },
+            scales: {
+                y: {
+                    grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                    ticks: { font: { family: "'Segoe UI', sans-serif" } }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { family: "'Segoe UI', sans-serif" } }
+                }
+            }
+        };
+
+        // Line Chart
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: {{ line_chart_data.labels|safe }},
+                datasets: [{
+                    label: 'Cumulative Score',
+                    data: {{ line_chart_data.cumulative_score|safe }},
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: '#007bff',
+                    pointHoverRadius: 6
+                }]
+            },
+            options: commonOptions
+        });
+
+        // Bar Chart
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: {{ bar_chart_data.labels|safe }},
+                datasets: [{
+                    label: 'Entries Count',
+                    data: {{ bar_chart_data.values|safe }},
+                    backgroundColor: [
+                        'rgba(0, 123, 255, 0.7)',
+                        'rgba(40, 167, 69, 0.7)',
+                        'rgba(255, 193, 7, 0.7)',
+                        'rgba(220, 53, 69, 0.7)',
+                        'rgba(23, 162, 184, 0.7)'
+                    ],
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    barThickness: 40
+                }]
+            },
+            options: commonOptions
+        });
+    </script>
+</body>
+</html>

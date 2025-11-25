@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: var(--font-family-system);
+            background: #F2F2F7;
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Reuse Navbar Styles from styles.css */
+        .navbar {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 0.5px solid rgba(0,0,0,0.1);
+        }
+
+        .container-404 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .card-404 {
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: saturate(180%) blur(20px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        h1 {
+            font-size: 5em;
+            background: linear-gradient(135deg, #FF3B30, #FF9500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        
+        .illustration {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .deep-breath {
+            font-weight: 600;
+            color: #34C759; /* iOS Green */
+            padding: 12px 24px;
+            background: rgba(52, 199, 89, 0.1);
+            border-radius: 20px;
+            display: inline-block;
+            margin: 10px 0 30px;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 30px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
+        }
+        .btn-home:hover { transform: scale(1.02); }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="mainNav">
+        <div class="navbar-brand">LifeMonitor</div>
+        <div class="nav-links">
+            <a href="{% url 'home' %}" class="nav-item">Home</a>
+            <a href="{% url 'settings' %}" class="nav-item">Settings</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="nav-item btn-logout">Logout</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="container-404">
+        <div class="card-404">
+            <div class="illustration">🧭</div>
+            <h1>404</h1>
+            <p>Oops! Looks like you've wandered off the map.</p>
+            <p>The page you're looking for is lost in the digital void. But don't worry, even the best explorers get lost sometimes.</p>
+            
+            <div class="deep-breath">Take a deep breath. Let's get back on track.</div>
+            
+            <div>
+                <a href="{% url 'home' %}" class="btn-home">
+                    <i class="fas fa-home"></i> Return Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

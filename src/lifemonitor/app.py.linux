@@ -1,0 +1,81 @@
+"""
+Monitor your days
+"""
+import os
+import sys
+import socketserver
+from pathlib import Path
+from threading import Thread
+from wsgiref.simple_server import WSGIServer
+
+import django
+from django.core.handlers.wsgi import WSGIHandler
+from django.core.servers.basehttp import WSGIRequestHandler
+
+import toga
+
+class ThreadedWSGIServer(socketserver.ThreadingMixIn, WSGIServer):
+    pass
+
+class Lifemonitor(toga.App):
+    def start_django_background(self, server):
+        """
+        This runs in a background thread.
+        It initializes Django and starts listening for requests.
+        It NEVER touches the GUI (self.web_view).
+        """
+        print("Background: Setting up Django...")
+        
+        # Setup Django (This is the slow part)
+        django.setup(set_prefix=False)
+        
+        # Attach the Django WSGI handler to our existing server
+        wsgi_handler = WSGIHandler()
+        server.set_app(wsgi_handler)
+        
+        print("Background: Django ready! Serving forever...")
+        # Start handling requests (Blocking)
+        server.serve_forever()
+
+    def cleanup(self, app, **kwargs):
+        print("Shutting down...")
+        if hasattr(self, '_httpd'):
+            self._httpd.shutdown()
+        return True
+
+    def startup(self):
+        # --- 1. SETUP PATHS (Main Thread) ---
+        webapp_path = Path(__file__).parent.parent / "webapp"
+        if str(webapp_path) not in sys.path:
+            sys.path.append(str(webapp_path))
+        os.environ["DJANGO_SETTINGS_MODULE"] = "user_monitoring.settings"
+
+        # --- 2. PREPARE SERVER (Main Thread) ---
+        # We bind the port HERE so we can get the port number safely.
+        self._httpd = ThreadedWSGIServer(("127.0.0.1", 0), WSGIRequestHandler)
+        self._httpd.daemon_threads = True
+        
+        host, port = self._httpd.socket.getsockname()
+        local_url = f"http://{host}:{port}/"
+        print(f"Main: Server bound to {local_url}")
+
+        # --- 3. SETUP GUI (Main Thread) ---
+        self.web_view = toga.WebView()
+        
+        # We set the URL immediately. The browser will start "loading" 
+        # and will naturally wait for the server to respond.
+        self.web_view.url = local_url
+
+        self.main_window = toga.MainWindow(title=self.formal_name)
+        self.main_window.content = self.web_view
+        self.main_window.show()
+
+        # --- 4. START BACKGROUND WORKER ---
+        # We pass the server object to the thread so it can run it.
+        self.server_thread = Thread(target=self.start_django_background, args=(self._httpd,))
+        self.server_thread.start()
+
+        self.on_exit = self.cleanup
+
+def main():
+    return Lifemonitor()

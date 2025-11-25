@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life OS - Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Font Awesome Pro/Free -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        .navbar {
+            background: rgba(255, 255, 255, 0.5); /* More transparent for this page */
+            backdrop-filter: blur(20px);
+            border-bottom: 0px; /* Seamless look */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Transparent Glass Navbar -->
+    <nav class="navbar" id="mainNav">
+        <div class="navbar-brand">LifeMonitor</div>
+        <div class="nav-links">
+            <a href="{% url 'home' %}" class="nav-item">Home</a>
+            <a href="{% url 'settings' %}" class="nav-item">Settings</a>
+            <a href="{% url 'logout' %}" class="nav-item btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="home-container">
+        
+        <!-- 1. Dynamic Hero Header -->
+        <div class="hero-card animate-fade-up">
+            <div class="hero-content">
+                <div class="hero-top-row">
+                    <span class="hero-date" id="heroDate">LOADING...</span>
+                    <button class="btn-manifesto" onclick="openSheet()" title="Daily Manifesto">
+                        <i class="fas fa-compass"></i>
+                    </button>
+                </div>
+                <div class="hero-greeting">
+                    <span id="timeGreeting">Hello</span>,<br>
+                    <span class="hero-username">{{ user.username|default:"Creator" }}</span>
+                </div>
+            </div>
+            <!-- Decorative Background Blur -->
+            <div class="hero-blur"></div>
+        </div>
+
+        <!-- 2. The Bento Grid -->
+        <div class="bento-grid animate-fade-up delay-1">
+            
+            <!-- Primary Action: Daily Input (Large Square) -->
+            <a href="{% url 'input' %}" class="bento-item span-2 span-row-2 daily-widget">
+                <div class="bento-icon-box bg-blue">
+                    <i class="fas fa-pen-fancy"></i>
+                </div>
+                <div class="bento-content">
+                    <h3 class="bento-title">Daily Log</h3>
+                    <p class="bento-desc">Track habits & reflect.</p>
+                </div>
+                <div class="bento-action">
+                    <span>New Entry <i class="fas fa-arrow-right"></i></span>
+                </div>
+                <i class="fas fa-book-open bento-bg-icon"></i>
+            </a>
+
+            <!-- Analytics (Small) -->
+            <a href="{% url 'chart' %}" class="bento-item">
+                <div class="bento-icon-box bg-orange">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <div class="bento-content">
+                    <h3 class="bento-title">Analytics</h3>
+                    <p class="bento-desc">Growth</p>
+                </div>
+            </a>
+
+            <!-- Calendar (Small) -->
+            <a href="{% url 'calendar' %}" class="bento-item">
+                <div class="bento-icon-box bg-red">
+                    <i class="far fa-calendar-alt"></i>
+                </div>
+                <div class="bento-content">
+                    <h3 class="bento-title">Calendar</h3>
+                    <p class="bento-desc">Tasks</p>
+                </div>
+            </a>
+
+            <!-- Vision Board / Plans (Wide) -->
+            <a href="{% url 'plan_ideas' %}" class="bento-item span-2">
+                <div class="bento-icon-box bg-purple">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <div class="bento-content">
+                    <h3 class="bento-title">Vision Board</h3>
+                    <p class="bento-desc">Strategic plans & ideas.</p>
+                </div>
+                <i class="far fa-lightbulb bento-bg-icon"></i>
+            </a>
+
+            <!-- Full Report (Small) -->
+            <a href="{% url 'view_data' %}" class="bento-item">
+                <div class="bento-icon-box bg-green">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="bento-content">
+                    <h3 class="bento-title">History</h3>
+                    <p class="bento-desc">Journal</p>
+                </div>
+            </a>
+
+            <!-- Settings (Small) -->
+            <a href="{% url 'habit_list' %}" class="bento-item">
+                <div class="bento-icon-box bg-dark">
+                    <i class="fas fa-sliders-h"></i>
+                </div>
+                <div class="bento-content">
+                    <h3 class="bento-title">Setup</h3>
+                    <p class="bento-desc">Config</p>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- 3. Mind Capture (Refined iMessage Style) -->
+        <div class="animate-fade-up delay-2" style="margin-bottom: 40px; position: relative; z-index: 5;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; padding: 0 4px;">
+                <h3 style="font-size: 19px; font-weight: 700; color: var(--text-dark);">Quick Capture</h3>
+                <span style="font-size: 13px; color: var(--text-light);">Save a thought</span>
+            </div>
+            
+            <form method="POST" class="ios-input-bar">
+                {% csrf_token %}
+                
+                <!-- Sense Toggle -->
+                <label class="sense-toggle-btn" title="Mark as Deeply Sensed">
+                    {{ form.is_sensed }}
+                    <div class="leaf-icon-wrapper">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                </label>
+
+                <!-- Seamless Input -->
+                <div class="text-field-container">
+                    <textarea name="text" class="seamless-textarea" placeholder="What's on your mind?" rows="1" required 
+                              oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+                </div>
+
+                <!-- Send Button -->
+                <button class="btn-ios-send" type="submit">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- 4. Inspiration Masonry -->
+        <div class="animate-fade-up delay-3">
+            <h3 style="font-size: 19px; font-weight: 700; color: var(--text-dark); margin-bottom: 16px; padding-left: 4px;">Inspiration</h3>
+            <div class="masonry-grid">
+                {% for quote in quotes %}
+                <div class="masonry-item">
+                    <div class="quote-card {% if quote.is_sensed %}sensed{% endif %}">
+                        "{{ quote.text }}"
+                    </div>
+                </div>
+                {% empty %}
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-light);">
+                    <i class="fas fa-wind" style="font-size: 24px; margin-bottom: 10px; opacity: 0.3;"></i>
+                    <p>Your mind garden is empty.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 5. iOS Bottom Sheet (Manifesto) -->
+    <div id="manifestoSheet" class="ios-sheet-modal" onclick="closeSheet(event)">
+        <div class="sheet-content">
+            <div class="sheet-handle"></div>
+            <div style="text-align: center; margin-bottom: 24px;">
+                <h2 style="margin: 0; font-size: 22px;">Daily Manifesto</h2>
+                <p style="color: var(--text-light); font-size: 14px; margin-top: 4px;">Principles for a balanced life.</p>
+            </div>
+            
+            <ul class="manifesto-list">
+                <li><i class="fas fa-sun" style="color: #FF9500;"></i> Live everyday on a fresh start.</li>
+                <li><i class="fas fa-bullseye" style="color: #FF3B30;"></i> Set your goals for the rest of the day.</li>
+                <li><i class="fas fa-heart" style="color: #FF2D55;"></i> Do the things you love.</li>
+                <li><i class="fas fa-balance-scale" style="color: #5856D6;"></i> Avoid Comparing.</li>
+                <li><i class="fas fa-user-astronaut" style="color: #5AC8FA;"></i> Don't be afraid to spend Time Alone.</li>
+                <li><i class="fas fa-comment-slash" style="color: #8E8E93;"></i> Avoid Gossip.</li>
+                <li><i class="fas fa-smile-beam" style="color: #FFCC00;"></i> Laugh More.</li>
+                <li><i class="fas fa-hand-holding-heart" style="color: #34C759;"></i> Forgive and Forget.</li>
+            </ul>
+            
+            <button class="btn btn-primary btn-block" style="margin-top: 24px; border-radius: 14px; padding: 14px;" onclick="closeSheetDirect()">
+                Got it
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- Dynamic Greeting & Date ---
+        const hour = new Date().getHours();
+        const greetEl = document.getElementById('timeGreeting');
+        if (hour < 12) greetEl.innerText = "Good Morning";
+        else if (hour < 18) greetEl.innerText = "Good Afternoon";
+        else greetEl.innerText = "Good Evening";
+
+        const dateEl = document.getElementById('heroDate');
+        const options = { weekday: 'long', month: 'short', day: 'numeric' };
+        dateEl.innerText = new Date().toLocaleDateString('en-US', options).toUpperCase();
+
+        // --- Navbar Scroll Logic ---
+        let lastScroll = 0;
+        const navbar = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > lastScroll && currentScroll > 50) {
+                navbar.classList.add('nav-hidden');
+            } else {
+                navbar.classList.remove('nav-hidden');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // --- Sheet Modal Logic ---
+        const sheet = document.getElementById('manifestoSheet');
+        
+        function openSheet() {
+            sheet.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSheet(e) {
+            if (e.target === sheet) {
+                sheet.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        function closeSheetDirect() {
+            sheet.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // Show on first load
+        window.onload = function() {
+            if(!sessionStorage.getItem('modalShown')) {
+                setTimeout(openSheet, 600);
+                sessionStorage.setItem('modalShown', 'true');
+            }
+        };
+    </script>
+</body>
+</html>
