@@ -1,0 +1,145 @@
+# This project was generated with Unknown using template: Not provided@Not provided
+[tool.briefcase]
+project_name = "LifeMonitor"
+bundle = "com.jg"
+version = "0.0.1"
+url = "https://jerlshinjg.com"
+# License definition fixed to remove warning
+license.file = "LICENSE"
+author = "Jerlshin"
+author_email = "jerlshin@official008@gmail.com"
+
+[tool.briefcase.app.lifemonitor]
+formal_name = "LifeMonitor"
+description = "Monitor your days"
+long_description = """More details about the app should go here.
+"""
+icon = "src/lifemonitor/resources/lifemonitor"
+sources = [
+    "src/lifemonitor",
+    "src/webapp",
+]
+test_sources = [
+    "tests",
+]
+
+requires = [
+    "django~=4.1",
+    "python-decouple",
+    # "travertino" REMOVED to avoid conflicts
+    "whitenoise",
+    "openpyxl",
+    "djangorestframework",
+    "tzdata",  # <--- ADD THIS LINE
+]
+test_requires = [
+    "pytest",
+]
+
+[tool.briefcase.app.lifemonitor.macOS]
+universal_build = true
+requires = [
+    "toga-cocoa~=0.3.1",
+    "std-nslog~=1.0.0"
+]
+
+[tool.briefcase.app.lifemonitor.linux]
+requires = [
+    "toga-gtk~=0.3.1",
+]
+
+[tool.briefcase.app.lifemonitor.linux.system.debian]
+system_requires = [
+    "libcairo2-dev",
+    "libgirepository1.0-dev",
+]
+
+system_runtime_requires = [
+    "libgtk-3-0",
+    "libgirepository-1.0-1",
+    "gir1.2-gtk-3.0",
+    "libgirepository-1.0-1",
+    "libcanberra-gtk3-module",
+]
+
+[tool.briefcase.app.lifemonitor.linux.system.rhel]
+system_requires = [
+    "cairo-gobject-devel",
+    "gobject-introspection-devel",
+]
+
+system_runtime_requires = [
+    "gobject-introspection",
+    "gtk3",
+    "libcanberra-gtk3",
+]
+
+[tool.briefcase.app.lifemonitor.linux.system.suse]
+system_requires = []
+system_runtime_requires = []
+
+[tool.briefcase.app.lifemonitor.linux.system.arch]
+system_requires = [
+    "cairo",
+    "gobject-introspection",
+    "gtk3",
+    "libcanberra",
+]
+
+system_runtime_requires = [
+    "gtk3",
+    "gobject-introspection-runtime",
+    "libcanberra",
+]
+
+[tool.briefcase.app.lifemonitor.linux.appimage]
+manylinux = "manylinux2014"
+system_requires = [
+    "cairo-gobject-devel",
+    "gobject-introspection-devel",
+    "gtk3-devel",
+    "libcanberra-gtk3",
+    "PackageKit-gtk3-module",
+    "gvfs-client",
+]
+linuxdeploy_plugins = [
+    "DEPLOY_GTK_VERSION=3 gtk",
+]
+
+[tool.briefcase.app.lifemonitor.linux.flatpak]
+flatpak_runtime = "org.gnome.Platform"
+flatpak_runtime_version = "44"
+flatpak_sdk = "org.gnome.Sdk"
+
+[tool.briefcase.app.lifemonitor.windows]
+requires = [
+    "toga-winforms~=0.3.1",
+]
+
+[tool.briefcase.app.lifemonitor.iOS]
+requires = [
+    "toga-iOS~=0.3.1",
+    "std-nslog~=1.0.0"
+]
+
+# ANDROID SECTION - UPDATED
+[tool.briefcase.app.lifemonitor.android]
+requires = [
+    # Updated to support Python 3.13+ (Briefcase's default)
+    # We do NOT explicitly include rubicon-java as it causes build errors.
+    # toga-android will pull in what it needs.
+    "toga-android>=0.4.0"
+]
+
+manifest_permissions = [
+    "android.permission.INTERNET",
+    "android.permission.READ_EXTERNAL_STORAGE",
+    "android.permission.WRITE_EXTERNAL_STORAGE",
+    "android.permission.MANAGE_EXTERNAL_STORAGE"
+]
+
+[tool.briefcase.app.lifemonitor.web]
+requires = [
+    "toga-web~=0.3.1",
+]
+style_framework = "Shoelace v2.3"
