@@ -13,6 +13,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('home/', views.home_view, name='home'),
     
+    path('setup-database/', views.setup_database_view, name='setup_database'),
     # Settings (Handles DB switching/creation now)
     path('settings/', views.settings_view, name='settings'),
     

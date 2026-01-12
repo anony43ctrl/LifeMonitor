@@ -26,6 +26,15 @@ from .serializers import CalendarTaskSerializer, TodoTaskSerializer
 from .models import Quote, CalendarTask, TodoTask, Plan, Branch, Habit, DailyEntry, HabitLog
 from .forms import QuoteForm, PlanForm, BranchForm, HabitForm, DailyEntryForm
 
+# monitor/views.py
+
+def setup_database_view(request):
+    """
+    Renders the initial setup page. This view must NOT use any 
+    database models because it is called when the DB is missing.
+    """
+    return render(request, 'monitor/setup_database.html')
+
 # --- Authentication Views ---
 def login_view(request):
     if request.method == 'POST':

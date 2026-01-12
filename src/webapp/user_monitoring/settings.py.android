@@ -7,34 +7,48 @@ import os
 import json
 from decouple import config
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- DYNAMIC DATABASE CONFIGURATION START ---
-USER_DATA_DIR = Path.home() / ".local" / "share" / "lifemonitor"
-USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
+# Check if we are running on Android (or passed a specific data path)
+android_data_path = os.environ.get("ANDROID_DATA_PATH")
 
-DB_CONFIG_FILE = USER_DATA_DIR / 'db_config.json' 
-DEFAULT_DB_PATH = USER_DATA_DIR / 'jerlshin.sqlite3'
+if android_data_path:
+    # We are on mobile/packaged app: Use the writable data directory
+    data_dir = Path(android_data_path)
+    # Create the folder if it doesn't exist
+    if not data_dir.exists():
+        data_dir.mkdir(parents=True, exist_ok=True)
+        
+    current_db_path = data_dir / 'db.sqlite3'
+    # Use the config file from the writable area, not the read-only install area
+    DB_CONFIG_FILE = data_dir / 'db_config.json'
 
-current_db_path = DEFAULT_DB_PATH
+else:
+    # We are on Desktop/Dev: Use the local source folder
+    DB_CONFIG_FILE = BASE_DIR / 'db_config.json'
+    DEFAULT_DB_PATH = BASE_DIR / 'db.sqlite3'
+    current_db_path = DEFAULT_DB_PATH
 
+# Load dynamic config if it exists
 if DB_CONFIG_FILE.exists():
     try:
         with open(DB_CONFIG_FILE, 'r') as f:
             config_data = json.load(f)
+            # load path and convert to Path object
             saved_path = config_data.get('db_path')
             if saved_path:
                 current_db_path = Path(saved_path)
     except Exception as e:
         print(f"Error loading db_config.json: {e}")
+
 # --- DYNAMIC DATABASE CONFIGURATION END ---
 
 SECRET_KEY = "django-insecure-*jyp*=#f&6n7opvn48bh#m*y=x7m)q*-lg9(7s&4h%jl!0ron@"
 
-# 1. DISABLE DEBUG FOR PRODUCTION FEEL
-DEBUG = False #True
+DEBUG = True
 
-# 2. ALLOW ALL HOSTS (Required for Briefcase/Localhost binding)
 ALLOWED_HOSTS = ['*']
 
 LOGIN_REDIRECT_URL = '/'
@@ -55,20 +69,17 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "monitor",
-    "rest_framework",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    # 3. DATABASE CHECK MIDDLEWARE
-    "user_monitoring.middleware.DatabaseCheckMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "user_monitoring.urls"
@@ -91,6 +102,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "user_monitoring.wsgi.application"
 
+# Database Configuration using the dynamic path
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -98,8 +110,7 @@ DATABASES = {
     }
 }
 
-
-AUTH_PASSWORD_VALIDATORS = [monitor
+AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
@@ -118,12 +129,27 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "monitor/static",
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# --- ANDROID STATIC FILES CONFIG (CRITICAL) ---
+# 1. Tell WhiteNoise to find files in your source folders dynamically
+WHITENOISE_USE_FINDERS = True
+
+# 2. Use basic storage. Do NOT use Manifest/Compressed storage on Android.
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+# DELETE or COMMENT OUT this line if it exists:
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
